@@ -5,17 +5,24 @@
         <div>首页</div>
       </template>
     </NavBar>
+    <HomeSwiper :banners="banners"></HomeSwiper>
+    <RecommendView :recommends="recommends"></RecommendView>
   </div>
 </template>
 
 <script>
   import NavBar from "components/common/navbar/NavBar";
+  import HomeSwiper from "./childComps/HomeSwiper";
+  import RecommendView from "./childComps/RecommendView";
+
   import {getHomeMultidata} from "network/home";
 
   export default {
     name: "Home",
     components:{
-      NavBar
+      RecommendView,
+      NavBar,
+      HomeSwiper
     },
     data(){
       return{
@@ -27,9 +34,10 @@
     created() {
      //1、请求多个数据
      getHomeMultidata().then(res=>{
-       console.log(res);
-       this.banners=res.data.data.banner.list
-       this.recommends=res.data.data.recommend.list
+       console.log(res.data.recommend.list);
+       this.banners=res.data.banner.list
+       this.recommends=res.data.recommend.list
+
      })
     }
   }
