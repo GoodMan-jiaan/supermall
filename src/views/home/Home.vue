@@ -5,13 +5,24 @@
         <div>首页</div>
       </template>
     </NavBar>
-    <HomeSwiper :banners="banners"></HomeSwiper>
-    <RecommendView :recommends="recommends"></RecommendView>
-    <FeatureView></FeatureView>
-    <tab-control class="tab-control"
-                 :titles="['流行','新款','精选']" @tabclick="tabClick"></tab-control>
-    <GoodsList :goods="showGoods"></GoodsList>
+    <Scroll class="content"
+            ref="scroll"
+            :probe-type="3"
+            @scroll="contentScroll"
+            :pull-up-load="true"
+            @pullingUp="loadMore">
+      <HomeSwiper :banners="banners"></HomeSwiper>
+      <RecommendView :recommends="recommends"></RecommendView>
+      <FeatureView></FeatureView>
+      <tab-control class="tab-control"
+                   :titles="['流行','新款','精选']" @tabclick="tabClick"></tab-control>
+      <GoodsList :goods="showGoods"></GoodsList>
+    </Scroll >
 
+<!--    组件的监听需要时使用@click.native
+        监听组件根元素的原生事件
+        v-show为true表示显示-->
+    <BackTop @click.native="backClick" v-show="isShowBackTop"></BackTop>
   </div>
 </template>
 
@@ -24,6 +35,8 @@
   import GoodsList from "components/content/goods/GoodsList";
   import NavBar from "components/common/navbar/NavBar";
   import TabControl from "components/content/tabControl/TabControl";
+  import Scroll from "components/common/scroll/Scroll";
+  import BackTop from "components/content/backTop/BackTop"
 
   import {getHomeMultidata,getHomeGoods} from "network/home";
 
@@ -35,7 +48,9 @@
       FeatureView,
       NavBar,
       TabControl,
-      GoodsList
+      GoodsList,
+      Scroll,
+      BackTop
     },
     data(){
       return{
@@ -48,7 +63,8 @@
           'sell':{page:0, list:[]}
         },
         //默认为流行
-        currentType:'pop'
+        currentType:'pop',
+        isShowBackTop:false
       }
     },
     computed:{
@@ -83,6 +99,31 @@
         }
       },
 
+      //监听滚动事件
+      //当滑到一定高度时，反对顶部按钮出现
+      contentScroll(position){
+        this.isShowBackTop=-position.y>1000
+      },
+
+      //加载更多
+      loadMore(){
+        this.getHomeGoods(this.currentType)
+
+
+        //因为图片加载属于异步加载，再图片还没加载完时就已经计算出高度，
+        //所以这里需要在图片加载完添加下面代码解决这个bug
+        //重新计算可滚动区域，
+        this.$refs.scroll.scroll.refresh()
+      },
+      //返回顶部
+      backClick(){
+        //使用ref获取到scroll组件中data里面的scroll属性
+        // this.$refs.scroll.scroll.scrollTo(0,0,500)
+        //调用scroll组件中的自定义的scrollTo的方法
+        this.$refs.scroll.scrollTo(0,0,500)
+      },
+
+
       //网络请求
       getHomeMultidata(){
         getHomeMultidata().then(res=>{
@@ -97,15 +138,21 @@
           //解析数组,添加进去
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page++
+
+          //重新计算高度
+          this.$refs.scroll.finishPullUp()
         })
       }
     }
   }
 </script>
 
-<style>
+<style scoped>
   #home{
     padding-top: 44px;
+
+    /*高度为100个饰扣*/
+    height: 100vh;
   }
   .home-nav{
     /*使用之前定义的变量*/
@@ -122,5 +169,11 @@
     position: sticky;
     top: 44px;
     z-index: 9;
+  }
+
+  .content{
+    /*这个函数算出滚动条的到高度，49是下面的tabber,上面#home属性中有个padding，所以导航的不用减*/
+    height: calc(100% - 49px);
+    overflow:hidden;
   }
 </style>
