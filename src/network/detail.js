@@ -25,3 +25,17 @@ export class Goods {
 }
 //使用方法
 // const g=new Goods()
+
+
+export class shop {
+  constructor(shopInfo) {
+    this.logo=shopInfo.shopLogo;
+    this.name=shopInfo.name
+    this.fans=shopInfo.cFans
+    this.sells=shopInfo.cSells
+    this.score=shopInfo.score
+    this.goodsCount=shopInfo.cGoods
+
+  }
+
+}

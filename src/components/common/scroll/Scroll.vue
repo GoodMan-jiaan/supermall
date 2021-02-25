@@ -8,7 +8,9 @@
 
 <script>
   import BScroll from "better-scroll"
+  import PullUp from "@better-scroll/pull-up"
 
+  BScroll.use(PullUp)
     export default {
         name: "Scroll",
       data(){
