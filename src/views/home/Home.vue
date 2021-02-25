@@ -5,17 +5,23 @@
         <div>首页</div>
       </template>
     </NavBar>
+    <tab-control class="tab-control"
+                 :titles="['流行','新款','精选']"
+                 @tabclick="tabClick"
+                 ref="tabControl1" v-show="isTabFixed"></tab-control>
     <Scroll class="content"
             ref="scroll"
             :probe-type="3"
             @scroll="contentScroll"
             :pull-up-load="true"
             @pullingUp="loadMore">
-      <HomeSwiper :banners="banners"></HomeSwiper>
+      <HomeSwiper :banners="banners" @swiperImageLoad="swiperImageLoad"></HomeSwiper>
       <RecommendView :recommends="recommends"></RecommendView>
       <FeatureView></FeatureView>
       <tab-control class="tab-control"
-                   :titles="['流行','新款','精选']" @tabclick="tabClick"></tab-control>
+                   :titles="['流行','新款','精选']"
+                   @tabclick="tabClick"
+                   ref="tabControl2"></tab-control>
       <GoodsList :goods="showGoods"></GoodsList>
     </Scroll >
 
@@ -64,7 +70,9 @@
         },
         //默认为流行
         currentType:'pop',
-        isShowBackTop:false
+        isShowBackTop:false,
+        tabOffsetTop:0,
+        isTabFixed:false
       }
     },
     computed:{
@@ -84,6 +92,11 @@
 
     },
     methods:{
+
+
+
+
+
       //事件监听的方法
       tabClick(index){
         switch (index) {
@@ -97,12 +110,18 @@
             this.currentType='sell'
             break
         }
+        this.$refs.tabControl1.currentIndex=index
+        this.$refs.tabControl2.currentIndex=index
       },
 
       //监听滚动事件
       //当滑到一定高度时，反对顶部按钮出现
       contentScroll(position){
+        //判断BackTop是否显示
         this.isShowBackTop=-position.y>1000
+        //决定tabControl是否吸顶
+        this.isTabFixed=(-position.y)>this.tabOffsetTop-44
+
       },
 
       //加载更多
@@ -142,6 +161,12 @@
           //重新计算高度
           this.$refs.scroll.finishPullUp()
         })
+      },
+      //监听轮播图的图片加载
+      swiperImageLoad(){
+        //2.获取tabControl的offetTop
+        //所有的组件都有一个属性$el:用户获取组件中的元素
+        this.tabOffsetTop=this.$refs.tabControl2.$el.offsetTop
       }
     }
   }
@@ -166,9 +191,9 @@
   }
   .tab-control{
     /*粘性定位*/
-    position: sticky;
-    top: 44px;
-    z-index: 9;
+    /*position: sticky;*/
+    /*top: 44px;*/
+    /*z-index: 9;*/
   }
 
   .content{

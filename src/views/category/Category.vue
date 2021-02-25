@@ -148,7 +148,7 @@
     }
 </script>
 
-<style>
+<style scoped>
   .wrapper{
     /*使li在ul模块中进行滚动*/
     height: 150px;

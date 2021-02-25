@@ -1,6 +1,7 @@
 <template>
   <div>
-    <router-view></router-view>
+    <keep-alive> <router-view></router-view></keep-alive>
+
     <TabBar>
 <!--      使用该插件时要在router中配置路由，并且传入path的路由要去之一致-->
       <TabBarItem path="/home">
