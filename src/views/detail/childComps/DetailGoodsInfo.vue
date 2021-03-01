@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Object.keys(detailInfo).length !==0" class="goods-info">
+  <div v-if="Object.keys(detailInfo).length !==0" class="goods-infos">
     <div class="info-desc clear-fix">
       <div class="start">
       </div>
@@ -44,7 +44,7 @@
 </script>
 
 <style scoped>
-.goods-info{
+.goods-infos{
   padding: 20px 0;
   border-bottom: 5px solid #f2f5f8;
 }

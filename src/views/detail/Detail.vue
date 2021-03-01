@@ -1,11 +1,13 @@
 <template>
   <div id="detail">
     <DetailNavBar class="detail-nav"></DetailNavBar>
-    <Scroll class="content" :pull-up-load="false">
+    <Scroll class="detail-content" ref="scroll" :pull-up-load="true" :probe-type="3">
       <detail-swiper :top-images="topImages"></detail-swiper>
       <DetailBaseInfo :goods="goods"></DetailBaseInfo>
       <DetailShopInfo :shop="shop"></DetailShopInfo>
-      <DetailGoodsInfo :detail-info="detailInfo"></DetailGoodsInfo>
+      <DetailGoodsInfo :detail-info="detailInfo" @imageLoad="imageLoad"></DetailGoodsInfo>
+      <DetailParamInfo :param-info="paramInfo" @paramImageLoad="paramImageLoad"></DetailParamInfo>
+      <DetailCommentInfo :comment-info="commentInfo"></DetailCommentInfo>
     </Scroll>
 
   </div>
@@ -19,8 +21,10 @@
   import DetailBaseInfo from "./childComps/DetailBaseInfo";
   import DetailShopInfo from "./childComps/DetailShopInfo";
   import DetailGoodsInfo from "./childComps/DetailGoodsInfo";
+  import DetailParamInfo from "./childComps/DetailParamInfo";
+  import DetailCommentInfo from "./childComps/DetailCommentInfo";
 
-  import {getDetail,Goods,shop} from "network/detail";
+  import {getDetail,Goods,shop,GoodsParam} from "network/detail";
   import Scroll from "components/common/scroll/Scroll";
 
   export default {
@@ -31,7 +35,10 @@
         DetailBaseInfo,
         DetailShopInfo,
         DetailGoodsInfo,
+        DetailParamInfo,
+        DetailCommentInfo,
         Scroll
+
       },
       data(){
           return{
@@ -39,7 +46,9 @@
             topImages:[],
             goods:{},
             shop:{},
-            detailInfo:{}
+            detailInfo:{},
+            paramInfo:{},
+            commentInfo:{}
           }
       },created() {
           //1、保存传入的iid
@@ -57,8 +66,25 @@
 
         //获取详情信息
         this.detailInfo=data.detailInfo
+
+        //获取参数信息
+        this.paramInfo=new GoodsParam(data.itemParams.info,data.itemParams.rule)
+
+        //获取评论信息
+        if(data.rate.cRate!==0){
+          this.commentInfo=data.rate.list[0]
+        }
       })
+      },
+    methods:{
+      //    使用图片监听，实时计算可滑动区域
+      imageLoad(){
+        this.$refs.scroll.scroll.refresh()
+      },
+      paramImageLoad(){
+        this.$refs.scroll.scroll.refresh()
       }
+    }
 
     }
 </script>
@@ -70,7 +96,7 @@
     background-color: #ffffff;
     height: 100vh;
   }
-  .content{
+  .detail-content{
     height: calc(100% - 44px);
   }
   .detail-nav{
@@ -78,4 +104,5 @@
     z-index: 9;
     background-color: #ffffff;
   }
+
 </style>
