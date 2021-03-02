@@ -9,6 +9,16 @@ export function getDetail(iid) {
   })
 }
 
+
+//详情页的推荐信息
+export function getRecommend() {
+  return request({
+    url:'/recommend'
+  })
+}
+
+
+
 //创建类，导出，打包数据（在Detail中调用）
 export class Goods {
   //构造函数（类似于java的构造函数）
@@ -39,6 +49,7 @@ export class shop {
   }
 
 }
+
 
 
 export class GoodsParam{

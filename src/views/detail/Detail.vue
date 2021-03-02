@@ -8,6 +8,7 @@
       <DetailGoodsInfo :detail-info="detailInfo" @imageLoad="imageLoad"></DetailGoodsInfo>
       <DetailParamInfo :param-info="paramInfo" @paramImageLoad="paramImageLoad"></DetailParamInfo>
       <DetailCommentInfo :comment-info="commentInfo"></DetailCommentInfo>
+      <GoodsList :goods="recommends"></GoodsList>
     </Scroll>
 
   </div>
@@ -24,7 +25,9 @@
   import DetailParamInfo from "./childComps/DetailParamInfo";
   import DetailCommentInfo from "./childComps/DetailCommentInfo";
 
-  import {getDetail,Goods,shop,GoodsParam} from "network/detail";
+  import GoodsList from "components/content/goods/GoodsList";
+
+  import {getDetail,Goods,shop,GoodsParam,getRecommend} from "network/detail";
   import Scroll from "components/common/scroll/Scroll";
 
   export default {
@@ -37,6 +40,9 @@
         DetailGoodsInfo,
         DetailParamInfo,
         DetailCommentInfo,
+
+        GoodsList,
+
         Scroll
 
       },
@@ -48,7 +54,8 @@
             shop:{},
             detailInfo:{},
             paramInfo:{},
-            commentInfo:{}
+            commentInfo:{},
+            recommends:[]
           }
       },created() {
           //1、保存传入的iid
@@ -75,9 +82,17 @@
           this.commentInfo=data.rate.list[0]
         }
       })
+
+      //请求推荐信息
+      getRecommend().then(res=>{
+          const list =res.data.list
+        console.log(list);
+        this.recommends =list
+
+      })
       },
     methods:{
-      //    使用图片监听，实时计算可滑动区域
+      //    使用图片监听，实时计算可滑动区域shop_id
       imageLoad(){
         this.$refs.scroll.scroll.refresh()
       },

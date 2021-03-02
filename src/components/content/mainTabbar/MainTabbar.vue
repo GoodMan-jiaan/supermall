@@ -1,8 +1,15 @@
 <template>
   <div>
-<!--    <keep-alive> <router-view></router-view></keep-alive>-->
+<!--    <keep-alive >-->
+<!--      <router-view></router-view>-->
+<!--    </keep-alive>-->
 
-    <router-view></router-view>
+    <router-view v-slot="{ Component }">
+      <keep-alive include="Home">
+        <component class="views" :is="Component"></component>
+      </keep-alive>
+    </router-view>
+<!--    <router-view></router-view>-->
     <TabBar>
 <!--      使用该插件时要在router中配置路由，并且传入path的路由要去之一致-->
       <TabBarItem path="/home">
