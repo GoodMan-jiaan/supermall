@@ -26,6 +26,7 @@ export class Goods {
     this.title=itemInfo.title
     this.desc=itemInfo.desc
     this.newPrice=itemInfo.price
+
     this.oldcount=itemInfo.oldPrice
     this.discount=itemInfo.discountDesc
     this.columns=columns

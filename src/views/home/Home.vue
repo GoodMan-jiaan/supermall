@@ -42,9 +42,10 @@
   import NavBar from "components/common/navbar/NavBar";
   import TabControl from "components/content/tabControl/TabControl";
   import Scroll from "components/common/scroll/Scroll";
-  import BackTop from "components/content/backTop/BackTop"
+  // import BackTop from "components/content/backTop/BackTop"
 
   import {getHomeMultidata,getHomeGoods} from "network/home";
+  import {backTopMixin} from "common/mixin"
 
   export default {
     name: "Home",
@@ -56,7 +57,7 @@
       TabControl,
       GoodsList,
       Scroll,
-      BackTop
+      // BackTop
     },
     data(){
       return{
@@ -70,11 +71,12 @@
         },
         //默认为流行
         currentType:'pop',
-        isShowBackTop:false,
+        // isShowBackTop:false,
         tabOffsetTop:0,
         isTabFixed:false
       }
     },
+    mixins:[backTopMixin],
     computed:{
       showGoods(){
         return this.goods[this.currentType].list
@@ -92,11 +94,6 @@
 
     },
     methods:{
-
-
-
-
-
       //事件监听的方法
       tabClick(index){
         switch (index) {
@@ -135,12 +132,12 @@
         this.$refs.scroll.scroll.refresh()
       },
       //返回顶部
-      backClick(){
-        //使用ref获取到scroll组件中data里面的scroll属性
-        // this.$refs.scroll.scroll.scrollTo(0,0,500)
-        //调用scroll组件中的自定义的scrollTo的方法
-        this.$refs.scroll.scrollTo(0,0,500)
-      },
+      // backClick(){
+      //   //使用ref获取到scroll组件中data里面的scroll属性
+      //   // this.$refs.scroll.scroll.scrollTo(0,0,500)
+      //   //调用scroll组件中的自定义的scrollTo的方法
+      //   this.$refs.scroll.scrollTo(0,0,500)
+      // },
 
 
       //网络请求
