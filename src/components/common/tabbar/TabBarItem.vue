@@ -35,7 +35,6 @@
       },
       methods:{
         itemClick(){
-          console.log("itemClick")
           if(this.$route.path==this.path){
           }else{
             this.$router.replace(this.path).catch(err=>{})

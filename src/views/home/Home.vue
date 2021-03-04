@@ -165,6 +165,9 @@
         //所有的组件都有一个属性$el:用户获取组件中的元素
         this.tabOffsetTop=this.$refs.tabControl2.$el.offsetTop
       }
+    },
+    activated() {
+      console.log('00000');
     }
   }
 </script>

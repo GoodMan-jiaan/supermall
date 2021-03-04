@@ -9,6 +9,9 @@
             :pull-up-load="true"
             :probe-type="3"
             @scroll="contentScroll">
+
+
+
       <detail-swiper :top-images="topImages"></detail-swiper>
       <DetailBaseInfo :goods="goods"></DetailBaseInfo>
       <DetailShopInfo :shop="shop"></DetailShopInfo>
@@ -16,6 +19,7 @@
       <DetailParamInfo ref="params" :param-info="paramInfo" @paramImageLoad="paramImageLoad"></DetailParamInfo>
       <DetailCommentInfo ref="comment" :comment-info="commentInfo"></DetailCommentInfo>
       <GoodsList ref="recommend" :goods="recommends"></GoodsList>
+
     </Scroll>
 
     <BackTop @click.native="backClick" v-show="isShowBackTop"></BackTop>
@@ -136,7 +140,6 @@
       //请求推荐信息
       getRecommend().then(res=>{
           const list =res.data.list
-        console.log(list);
         this.recommends =list
       })
       },
@@ -202,7 +205,8 @@
         product.iid=this.iid
 
         //将商品添加到购物车
-
+       // this.$store.commit('addCart',product)  //调用vuex中mutations
+        this.$store.dispatch('addCart',product)
       }
     },
 
