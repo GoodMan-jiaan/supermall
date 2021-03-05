@@ -1,7 +1,7 @@
 <template>
   <div class="bottom-bar">
     <div class="check-content">
-      <check-button class="check-button"></check-button>
+      <check-button class="check-button" :is-checked="isSelectAll" @click.native="checkClick"></check-button>
       <span>全选</span>
     </div>
 
@@ -31,6 +31,36 @@
         },
         CheckLength(){
           return this.$store.state.cartList.filter(item=>item.checked).length
+        },
+        isSelectAll(){
+          if(this.$store.state.cartList.length==0) return false
+          // 1、fitter方法
+          // return !(this.$store.state.cartList.filter(item=> item.checked).length)
+          //2、find方法
+          // return !this.$store.state.cartList.find(item=>!item.checked)
+          //3、普通遍历
+          for(let item of this.$store.state.cartList){
+            if(!item.checked){
+              return false
+            }
+          }
+          return true
+        }
+      },
+      methods:{
+        checkClick(){
+          //全部选中
+          // if(this.isSelectAll){
+          //   this.$store.state.cartList.forEach(item => item.checked=false)
+          // }else{//有部分不选中
+          //   this.$store.state.cartList.forEach(item => item.checked=true)
+          // }
+
+          this.$store.dispatch('actionsCheckClick',this.isSelectAll)
+
+          //不能这样简化，因为会this.isSelectAll的值会被影响
+          //   this.$store.state.cartList.forEach(item => item.checked=!this.isSelectAll)
+
         }
       }
     }

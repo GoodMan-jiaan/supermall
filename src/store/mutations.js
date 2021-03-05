@@ -9,5 +9,11 @@ export default {
   },
   [ADD_TO_CART](state,payload){
     state.cartList.push(payload)
+  },
+  changeTrue(state){
+    state.cartList.forEach(item=>item.checked=true)
+  },
+  changeFalse(state){
+    state.cartList.forEach(item=>item.checked=false)
   }
 }

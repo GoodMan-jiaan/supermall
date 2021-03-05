@@ -27,5 +27,13 @@ export default {
       context.commit(ADD_TO_CART,payload)
     }
 
+  },
+  actionsCheckClick(context,isSelectAll){
+    if(isSelectAll){
+      context.commit('changeFalse')
+    }else{
+      context.commit('changeTrue')
+    }
+
   }
 }
