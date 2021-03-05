@@ -6,5 +6,6 @@ import router from "./router";
 // import Vuex from 'vuex'
 
 import store from "./store";
+// import toast from "components/common/toast".use(toast)
 
 createApp(App).use(router).use(store).mount('#app')
